@@ -1,0 +1,75 @@
+{
+  "name": "hexhotel",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=/hexhotel/",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dayjs": "^1.10.4",
+    "element-plus": "^1.0.2-beta.30",
+    "lodash": "^4.17.20",
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.1.2",
+    "@vue/compiler-sfc": "^3.0.5",
+    "@vue/eslint-config-standard": "^6.0.0",
+    "autoprefixer": "^10.2.3",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.18.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-vue": "^7.0.0-beta.4",
+    "postcss": "^8.2.4",
+    "sass": "^1.32.5",
+    "tailwindcss": "^2.0.2",
+    "vite": "^2.0.0-beta.45",
+    "@tailwindcss/forms": "^0.2.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-recommended",
+      "@vue/standard"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {
+      "brace-style": [
+        "error",
+        "stroustrup"
+      ],
+      "indent": [
+        "error",
+        4
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "vue/html-indent": [
+        "error",
+        4
+      ],
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          "singleline": 3
+        }
+      ],
+      "import/no-absolute-path": "off",
+      "no-undef": "off"
+    }
+  }
+}
