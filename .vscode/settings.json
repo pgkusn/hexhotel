@@ -1,8 +1,0 @@
-{
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "eslint.validate": ["javascript", "vue"],
-    "vetur.validation.template": false,
-    "csscomb.formatOnSave": true
-}
