@@ -1,6 +1,6 @@
 <template>
     <footer class="mx-auto text-darkGray" :class="props.addr ? 'py-6 border-lightGray border-solid border-t flex justify-between' : 'py-4'">
-        <p>© 2019 HexHotel. All rights reserved.</p>
+        <p>© {{ new Date().getFullYear() }} HexHotel. All rights reserved.</p>
         <p v-if="props.addr">
             No. 5, Kaokao St., Kaohsiung City 803, Taiwan
         </p>
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-    name: 'VueFooter',
+    name: 'FooterBlock',
     props: {
         addr: {
             type: Boolean,

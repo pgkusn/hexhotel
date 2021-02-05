@@ -22,10 +22,10 @@
                 </div>
                 <div ref="reserveAreaEl" class="reserve-area-container top-32" :class="[isFixed ? 'fixed' : 'absolute', { 'is-fixed-bottom': isFixedBottom }]">
                     <p class="text-darkBlue text-right">
-                        <strong class="text-2xl">${{ thousands(room.normalDayPrice) }} NTD</strong> / night
+                        <strong class="text-2xl">${{ format(room.normalDayPrice) }} NTD</strong> / night
                     </p>
                     <p class="text-sm text-darkGray text-right mb-6">
-                        holiday price - ${{ thousands(room.holidayPrice) }} NTD / night
+                        holiday price - ${{ format(room.holidayPrice) }} NTD / night
                     </p>
                     <ReserveArea :show-total="true" />
                 </div>
@@ -102,24 +102,24 @@
         </div>
     </main>
     <Gmap />
-    <VueFooter />
+    <FooterBlock />
 </template>
 
 <script>
-import { ref, watch, onMounted, onBeforeMount, computed } from 'vue';
+import { ref, watch, onMounted, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { throttle } from 'lodash';
 import Gmap from '/src/components/Gmap.vue';
-import VueFooter from '/src/components/VueFooter.vue';
+import FooterBlock from '/src/components/FooterBlock.vue';
 import ReserveArea from '/src/components/ReserveArea.vue';
-import thousands from '/src/thousands.js';
+import format from '/src/format.js';
 
 export default {
     name: 'RoomDetail',
     components: {
         Gmap,
-        VueFooter,
+        FooterBlock,
         ReserveArea
     },
     setup () {
@@ -129,13 +129,12 @@ export default {
 
         const room = ref(null);
         const currentImageUrl = ref('');
-        const booking = computed(() => store.state.booking);
         const getRoomDetail = async () => {
             if (!route.params.id) return;
             const data = await store.dispatch('getRoomDetail', route.params.id);
             if (data) {
                 room.value = data;
-                currentImageUrl.value = data.imageUrl[0];
+                currentImageUrl.value = data.imageUrl[0]; // set default image
             }
             else {
                 alert('No information found.');
@@ -157,15 +156,14 @@ export default {
         const isFixedBottom = ref(false);
         const scrollHandler = throttle(() => {
             const fixedBottomPos = 630;
-            isFixed.value = window.scrollY >= reserveAreaEl.value?.offsetTop && window.scrollY < fixedBottomPos;
-            isFixedBottom.value = window.scrollY > fixedBottomPos;
+            isFixed.value = window.pageYOffset >= reserveAreaEl.value?.offsetTop && window.pageYOffset < fixedBottomPos;
+            isFixedBottom.value = window.pageYOffset > fixedBottomPos;
         });
 
         return {
             room,
-            booking,
             currentImageUrl,
-            thousands,
+            format,
             reserveAreaEl,
             isFixed,
             isFixedBottom

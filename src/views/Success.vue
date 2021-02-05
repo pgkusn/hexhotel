@@ -45,19 +45,20 @@
             HOMEPAGE
         </button>
     </main>
-    <VueFooter :addr="true" />
+    <FooterBlock :addr="true" />
 </template>
 
 <script>
+import { onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import dayjs from 'dayjs';
-import VueFooter from '/src/components/VueFooter.vue';
+import FooterBlock from '/src/components/FooterBlock.vue';
 
 export default {
     name: 'Success',
     components: {
-        VueFooter
+        FooterBlock
     },
     setup () {
         const store = useStore();
@@ -71,10 +72,12 @@ export default {
         const checkIn = dayjs(store.state.checkInAndOut.checkIn).format('YYYY-MM-DD');
         const checkOut = dayjs(store.state.checkInAndOut.checkOut).format('YYYY-MM-DD');
         const back = () => {
-            store.commit('setCheckInAndOut', { type: 'checkIn', value: null });
-            store.commit('setCheckInAndOut', { type: 'checkOut', value: null });
             router.replace({ name: 'Home' });
         };
+        onBeforeUnmount(() => {
+            store.commit('setCheckInAndOut', { type: 'checkIn', value: null });
+            store.commit('setCheckInAndOut', { type: 'checkOut', value: null });
+        });
 
         return {
             name,

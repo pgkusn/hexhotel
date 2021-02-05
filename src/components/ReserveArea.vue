@@ -9,7 +9,7 @@
             </div>
         </template>
         <div
-            v-if="props.roomList"
+            v-if="props.showRoomList"
             class="relative flex items-center px-8 py-6 border-solid border-darkGray border-l border-r border-b"
             @click.stop="showMenu = !showMenu"
         >
@@ -60,16 +60,16 @@
         <div v-show="props.showTotal && !disableSubmit" class="px-8 py-6 border-solid border-darkGray border-l border-r border-b">
             <dl class="flex flex-wrap mb-6">
                 <dt v-show="dayCount.normalDay" class="w-1/2 text-darkGray">
-                    ${{ thousands(room?.normalDayPrice) }} × {{ dayCount.normalDay }} night
+                    ${{ format(room?.normalDayPrice) }} × {{ dayCount.normalDay }} night
                 </dt>
                 <dd v-show="dayCount.normalDay" class="w-1/2 text-right text-darkGray">
-                    ${{ normalDaySubtotal }}
+                    ${{ format(normalDaySubtotal) }}
                 </dd>
                 <dt v-show="dayCount.holiday" class="w-1/2 mt-2 text-darkGray">
-                    ${{ thousands(room?.holidayPrice) }} × {{ dayCount.holiday }} night
+                    ${{ format(room?.holidayPrice) }} × {{ dayCount.holiday }} night
                 </dt>
                 <dd v-show="dayCount.holiday" class="w-1/2 mt-2 text-right text-darkGray">
-                    ${{ holidaySubtotal }}
+                    ${{ format(holidaySubtotal) }}
                 </dd>
             </dl>
             <dl class="flex flex-wrap border-solid border-lightGray border-t pt-6">
@@ -77,7 +77,7 @@
                     TOTAL
                 </dt>
                 <dd class="w-1/2 text-right text-darkBlue font-bold">
-                    ${{ total }}
+                    ${{ format(total) }}
                 </dd>
             </dl>
         </div>
@@ -98,20 +98,16 @@ import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import { intersection } from 'lodash';
-import thousands from '/src/thousands.js';
+import format from '/src/format.js';
 
 export default {
     name: 'ReserveArea',
     props: {
+        showRoomList: {
+            type: Boolean,
+            default: false
+        },
         showHeader: {
-            type: Boolean,
-            default: false
-        },
-        roomList: {
-            type: Boolean,
-            default: false
-        },
-        readonly: {
             type: Boolean,
             default: false
         },
@@ -122,6 +118,10 @@ export default {
         showSubmit: {
             type: Boolean,
             default: true
+        },
+        readonly: {
+            type: Boolean,
+            default: false
         }
     },
     setup (props) {
@@ -145,11 +145,12 @@ export default {
         const booking = computed(() => store.state.booking);
         const disabledDate = time => {
             const isSameOrBefore = dayjs(time).isSameOrBefore(dayjs(), 'date');
-            const isBooking = booking.value.includes(dayjs(time).format('YYYY-MM-DD'));
-            return isSameOrBefore || isBooking;
+            const isOutOfRange = dayjs(time).isAfter(dayjs().add(90, 'days'), 'date'); // more than 90 days
+            const isBooking = booking.value?.includes(dayjs(time).format('YYYY-MM-DD'));
+            return isSameOrBefore || isOutOfRange || isBooking;
         };
         const disableSubmit = computed(() => {
-            if (props.roomList) {
+            if (props.showRoomList) {
                 return !booking.value || !choiceCheckIn.value || !choiceCheckOut.value || (checkInTime.value >= checkOutTime.value);
             }
             else {
@@ -168,27 +169,32 @@ export default {
 
         // room info
         const roomId = ref(null);
-        if (!props.roomList) {
+        if (!props.showRoomList) {
             roomId.value = route.params.id;
         }
-        const rooms = computed(() => store.state.rooms);
-        const room = computed(() => rooms.value.find(item => item.id === roomId.value));
-
-        // 從首頁直接訂房，選擇房型時 ajax 取得已預訂日期
+        // 從首頁直接訂房，選擇房型時取得已預訂日期
         watch(roomId, async (value) => {
-            if (!props.roomList) return;
+            if (!props.showRoomList) return;
             await store.dispatch('getRoomDetail', value);
         });
+        const rooms = computed(() => store.state.rooms);
+        const room = computed(() => rooms.value.find(item => item.id === roomId.value));
 
         // check in/out
         const choiceCheckIn = ref(null);
         const choiceCheckOut = ref(null);
         const checkInAndOut = computed(() => store.state.checkInAndOut);
-        const checkInTime = computed(() => checkInAndOut.value.checkIn?.getTime());
-        const checkOutTime = computed(() => checkInAndOut.value.checkOut?.getTime());
+        const checkInTime = computed(() => dayjs(checkInAndOut.value.checkIn).valueOf());
+        const checkOutTime = computed(() => dayjs(checkInAndOut.value.checkOut).valueOf());
         const onFocus = ref(0);
         const onCheckInChange = value => {
             store.commit('setCheckInAndOut', { type: 'checkIn', value });
+            // 自動指定 check out 日期為 check in 隔天
+            if (value && !choiceCheckOut.value) {
+                const tomorrow = dayjs(value).add(1, 'days').format();
+                store.commit('setCheckInAndOut', { type: 'checkOut', value: tomorrow });
+                choiceCheckOut.value = tomorrow;
+            }
         };
         const onCheckOutChange = value => {
             store.commit('setCheckInAndOut', { type: 'checkOut', value });
@@ -205,11 +211,11 @@ export default {
             const oneDayTime = 1000 * 60 * 60 * 24;
             for (let time = checkInTime.value; time < checkOutTime.value; time += oneDayTime) {
                 newBooking.value.push(dayjs(time).format('YYYY-MM-DD'));
-                if (dayjs(time).day() > 0 && dayjs(time).day() < 6) {
-                    normalDay++;
+                if (dayjs(time).day() === 0 || dayjs(time).day() === 6) {
+                    holiday++;
                 }
                 else {
-                    holiday++;
+                    normalDay++;
                 }
             }
             return { normalDay, holiday };
@@ -220,15 +226,12 @@ export default {
 
         return {
             props,
-            route,
             showMenu,
             rooms,
             roomId,
             room,
             choiceCheckIn,
             choiceCheckOut,
-            checkInTime,
-            checkOutTime,
             onFocus,
             disabledDate,
             disableSubmit,
@@ -238,9 +241,8 @@ export default {
             normalDaySubtotal,
             holidaySubtotal,
             total,
-            newBooking,
             submitHandler,
-            thousands
+            format
         };
     }
 };

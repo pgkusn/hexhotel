@@ -7,7 +7,7 @@
                         HexHotel
                     </h1>
                     <div class="absolute top-8 right-0">
-                        <ReserveArea :room-list="true" />
+                        <ReserveArea :show-room-list="true" />
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
             </h2>
             <div class="grid gap-7 grid-cols-3">
                 <router-link
-                    v-for="item in recommendRoom"
+                    v-for="item in recommendRooms"
                     :key="item.id"
                     :to="{ name: 'RoomDetail', params: { id: item.id } }"
                     class="justify-self-center"
@@ -31,7 +31,7 @@
                         {{ item.name }}
                     </p>
                     <p class="text-right">
-                        ${{ item.normalDayPrice }} NTD / night
+                        ${{ format(item.normalDayPrice) }} NTD / night
                     </p>
                 </router-link>
             </div>
@@ -64,7 +64,7 @@
                     {{ item.name }}
                 </p>
                 <p class="text-right">
-                    ${{ item.normalDayPrice }} NTD / night
+                    ${{ format(item.normalDayPrice) }} NTD / night
                 </p>
             </router-link>
         </section>
@@ -86,7 +86,7 @@
                     {{ item.name }}
                 </p>
                 <p class="text-right">
-                    ${{ item.normalDayPrice }} NTD / night
+                    ${{ format(item.normalDayPrice) }} NTD / night
                 </p>
             </router-link>
         </section>
@@ -108,34 +108,35 @@
                     {{ item.name }}
                 </p>
                 <p class="text-right">
-                    ${{ item.normalDayPrice }} NTD / night
+                    ${{ format(item.normalDayPrice) }} NTD / night
                 </p>
             </router-link>
         </section>
     </main>
     <Gmap />
-    <VueFooter />
+    <FooterBlock />
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import Gmap from '/src/components/Gmap.vue';
-import VueFooter from '/src/components/VueFooter.vue';
+import FooterBlock from '/src/components/FooterBlock.vue';
 import ReserveArea from '/src/components/ReserveArea.vue';
+import format from '/src/format.js';
 
 export default {
     name: 'Home',
     components: {
         Gmap,
-        VueFooter,
+        FooterBlock,
         ReserveArea
     },
     setup () {
         const store = useStore();
 
         const rooms = computed(() => store.state.rooms);
-        const recommendRoom = computed(() => {
+        const recommendRooms = computed(() => {
             const _rooms = Object.assign([], rooms.value);
             const newRooms = [];
             for (let i = 0; i < 3; i++) {
@@ -149,10 +150,11 @@ export default {
         const twinRoom = computed(() => rooms.value.filter(item => item.name.includes('Twin Room')));
 
         return {
-            recommendRoom,
+            recommendRooms,
             singleRoom,
             doubleRoom,
-            twinRoom
+            twinRoom,
+            format
         };
     }
 };

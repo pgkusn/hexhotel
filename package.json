@@ -69,7 +69,8 @@
         }
       ],
       "import/no-absolute-path": "off",
-      "no-undef": "off"
+      "no-undef": "off",
+      "no-useless-escape": "off"
     }
   }
 }

@@ -15,7 +15,7 @@ const store = createStore({
                 checkOut: null
             },
             contactInfo: null,
-            booking: [],
+            booking: null,
             newBooking: []
         };
     },

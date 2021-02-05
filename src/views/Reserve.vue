@@ -46,20 +46,20 @@
             :show-submit="false"
         />
     </main>
-    <VueFooter :addr="true" />
+    <FooterBlock :addr="true" />
 </template>
 
 <script>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
-import VueFooter from '/src/components/VueFooter.vue';
+import FooterBlock from '/src/components/FooterBlock.vue';
 import ReserveArea from '/src/components/ReserveArea.vue';
 
 export default {
     name: 'Reserve',
     components: {
-        VueFooter,
+        FooterBlock,
         ReserveArea
     },
     directives: {
