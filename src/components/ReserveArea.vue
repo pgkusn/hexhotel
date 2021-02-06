@@ -95,7 +95,7 @@
 <script>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
 import dayjs from 'dayjs';
 import { intersection } from 'lodash';
 import format from '/src/format.js';
@@ -172,13 +172,18 @@ export default {
         if (!props.showRoomList) {
             roomId.value = route.params.id;
         }
-        // 從首頁直接訂房，選擇房型時取得已預訂日期
+        // 從首頁選擇房型時觸發
         watch(roomId, async (value) => {
-            if (!props.showRoomList) return;
-            await store.dispatch('getRoomDetail', value);
+            if (props.showRoomList) {
+                await store.dispatch('getRoomDetail', value);
+            }
+        });
+        // 從上方固定選單選擇房型時觸發
+        onBeforeRouteUpdate(async (to, from) => {
+            await store.dispatch('getRoomDetail', to.params.id);
         });
         const rooms = computed(() => store.state.rooms);
-        const room = computed(() => rooms.value.find(item => item.id === roomId.value));
+        const room = computed(() => store.state.room);
 
         // check in/out
         const choiceCheckIn = ref(null);

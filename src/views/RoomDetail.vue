@@ -106,9 +106,9 @@
 </template>
 
 <script>
-import { ref, watch, onMounted, onBeforeMount } from 'vue';
+import { ref, computed, onMounted, onBeforeMount, watch } from 'vue';
 import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { throttle } from 'lodash';
 import Gmap from '/src/components/Gmap.vue';
 import FooterBlock from '/src/components/FooterBlock.vue';
@@ -125,25 +125,14 @@ export default {
     setup () {
         const store = useStore();
         const route = useRoute();
-        const router = useRouter();
 
-        const room = ref(null);
+        const room = computed(() => store.state.room);
         const currentImageUrl = ref('');
-        const getRoomDetail = async () => {
-            if (!route.params.id) return;
-            const data = await store.dispatch('getRoomDetail', route.params.id);
-            if (data) {
-                room.value = data;
-                currentImageUrl.value = data.imageUrl[0]; // set default image
-            }
-            else {
-                alert('No information found.');
-                router.push({ name: 'Home' });
-            }
-        };
-        watch(() => route.params.id, getRoomDetail);
-        onMounted(() => {
-            getRoomDetail();
+        watch(room, value => {
+            currentImageUrl.value = value.imageUrl[0];
+        });
+        onMounted(async () => {
+            await store.dispatch('getRoomDetail', route.params.id);
             window.addEventListener('scroll', scrollHandler);
         });
         onBeforeMount(() => {
@@ -155,6 +144,7 @@ export default {
         const isFixed = ref(false);
         const isFixedBottom = ref(false);
         const scrollHandler = throttle(() => {
+            if (window.innerWidth < 1280) return;
             const fixedBottomPos = 630;
             isFixed.value = window.pageYOffset >= reserveAreaEl.value?.offsetTop && window.pageYOffset < fixedBottomPos;
             isFixedBottom.value = window.pageYOffset > fixedBottomPos;

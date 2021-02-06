@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import router from '../router';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://challenge.thef2e.com/api/thef2e2019/stage6';
@@ -10,13 +11,14 @@ const store = createStore({
         return {
             loading: false,
             rooms: [],
+            room: null,
+            booking: null,
+            newBooking: [],
             checkInAndOut: {
                 checkIn: null,
                 checkOut: null
             },
-            contactInfo: null,
-            booking: null,
-            newBooking: []
+            contactInfo: null
         };
     },
     mutations: {
@@ -26,17 +28,20 @@ const store = createStore({
         setRooms (state, rooms) {
             state.rooms = rooms;
         },
-        setCheckInAndOut (state, payload) {
-            state.checkInAndOut[payload.type] = payload.value;
-        },
-        setContactInfo (state, payload) {
-            state.contactInfo = payload;
+        setRoom (state, room) {
+            state.room = room;
         },
         setBooking (state, date) {
             state.booking = date;
         },
         setNewBooking (state, date) {
             state.newBooking = date;
+        },
+        setCheckInAndOut (state, payload) {
+            state.checkInAndOut[payload.type] = payload.value;
+        },
+        setContactInfo (state, payload) {
+            state.contactInfo = payload;
         }
     },
     actions: {
@@ -55,12 +60,13 @@ const store = createStore({
             try {
                 const { data } = await axios(`/room/${id}`);
                 if (data.success) {
+                    commit('setRoom', data.room[0]);
                     commit('setBooking', data.booking.map(item => item.date));
-                    return data.room[0];
                 }
             }
             catch (error) {
-                console.error(error.message);
+                alert('No information found.');
+                router.push({ name: 'Home' });
             }
         },
         async reserve ({ commit }, payload) {

@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router';
 import FooterBlock from '/src/components/FooterBlock.vue';
 import ReserveArea from '/src/components/ReserveArea.vue';
 
@@ -92,6 +92,21 @@ export default {
                 router.push({ name: 'Success' });
             }
         };
+        // 離開頁面提示
+        const beforeunloadHandler = () => {
+            event.preventDefault();
+            event.returnValue = '';
+        };
+        onMounted(() => {
+            window.addEventListener('beforeunload', beforeunloadHandler);
+        });
+        onBeforeUnmount(() => {
+            window.removeEventListener('beforeunload', beforeunloadHandler);
+        });
+        onBeforeRouteLeave(() => {
+            store.commit('setRoom', null);
+            store.commit('setBooking', null);
+        });
 
         return {
             name,

@@ -49,9 +49,8 @@
 </template>
 
 <script>
-import { onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
 import dayjs from 'dayjs';
 import FooterBlock from '/src/components/FooterBlock.vue';
 
@@ -74,7 +73,7 @@ export default {
         const back = () => {
             router.replace({ name: 'Home' });
         };
-        onBeforeUnmount(() => {
+        onBeforeRouteLeave(() => {
             store.commit('setCheckInAndOut', { type: 'checkIn', value: null });
             store.commit('setCheckInAndOut', { type: 'checkOut', value: null });
         });
