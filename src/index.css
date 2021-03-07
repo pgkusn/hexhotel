@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btn-main {
+        @apply bg-light-blue text-white py-6;
+    }
+    .btn-reserve {
+        @apply w-full disabled:opacity-50 disabled:cursor-default;
+    }
+}

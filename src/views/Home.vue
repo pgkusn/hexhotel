@@ -3,7 +3,7 @@
         <div class="px-20 mt-16">
             <div class="relative">
                 <div class="hero">
-                    <h1 class="pb-2 text-5xl font-bold italic bg-white text-darkBlue">
+                    <h1 class="pb-2 text-5xl font-bold italic bg-white text-dark-blue">
                         HexHotel
                     </h1>
                     <div class="absolute top-8 right-0">
@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <section class="mt-12 px-20 text-darkGray">
+        <section class="mt-12 px-20 text-dark-gray">
             <h1 class="text-4xl font-bold">
                 Recommend
             </h1>
@@ -38,15 +38,15 @@
         </section>
         <div class="banner flex justify-end items-end pr-20 pb-8 mt-12">
             <div>
-                <h2 class="text-4xl font-bold text-darkBlue">
+                <h2 class="text-4xl font-bold text-dark-blue">
                     Reserve the best service
                 </h2>
-                <p class="text-darkGray">
+                <p class="text-dark-gray">
                     over 50,000 commendations from our guests
                 </p>
             </div>
         </div>
-        <section class="grid gap-7 grid-cols-3 px-20 mt-12 text-darkGray">
+        <section class="grid gap-7 grid-cols-3 px-20 mt-12 text-dark-gray">
             <div>
                 <h1 class="text-4xl font-bold">
                     One person
@@ -68,7 +68,7 @@
                 </p>
             </router-link>
         </section>
-        <section class="grid gap-7 grid-cols-3 px-20 mt-12 text-darkGray">
+        <section class="grid gap-7 grid-cols-3 px-20 mt-12 text-dark-gray">
             <div>
                 <h1 class="text-4xl font-bold">
                     Two people
@@ -90,7 +90,7 @@
                 </p>
             </router-link>
         </section>
-        <section class="grid gap-7 grid-cols-3 px-20 mt-12 text-darkGray">
+        <section class="grid gap-7 grid-cols-3 px-20 mt-12 text-dark-gray">
             <div>
                 <h1 class="text-4xl font-bold">
                     Family

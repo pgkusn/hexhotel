@@ -1,11 +1,11 @@
 <template>
     <main class="flex-grow mx-auto pt-10 grid grid-cols-2 gap-8">
         <div>
-            <h1 class="text-4xl text-darkBlue font-bold">
+            <h1 class="text-4xl text-dark-blue font-bold">
                 Reservation<br>information
             </h1>
             <form @submit.prevent="submitHandler">
-                <div class="mt-6" :class="onFocus === 1 ? 'text-lightBlue' : 'text-darkBlue'">
+                <div class="mt-6" :class="onFocus === 1 ? 'text-light-blue' : 'text-dark-blue'">
                     <label for="name" class="flex items-center font-bold">
                         <span class="material-icons">perm_identity</span>NAME
                     </label>
@@ -14,13 +14,13 @@
                         v-model="name"
                         v-focus
                         type="text"
-                        class="border-b border-solid border-darkGray w-full mt-6 focus:outline-none focus:border-lightBlue"
+                        class="border-b border-solid border-dark-gray w-full mt-6 focus:outline-none focus:border-light-blue"
                         required
                         @focus="onFocus = 1"
                         @blur="onFocus = (onFocus === 2) ? 2 : 0"
                     >
                 </div>
-                <div class="mt-6" :class="onFocus === 2 ? 'text-lightBlue' : 'text-darkBlue'">
+                <div class="mt-6" :class="onFocus === 2 ? 'text-light-blue' : 'text-dark-blue'">
                     <label for="tel" class="flex items-center font-bold">
                         <span class="material-icons">phone_android</span>PHONE
                     </label>
@@ -28,13 +28,13 @@
                         id="tel"
                         v-model="tel"
                         type="text"
-                        class="border-b border-solid border-darkGray w-full mt-6 focus:outline-none focus:border-lightBlue"
+                        class="border-b border-solid border-dark-gray w-full mt-6 focus:outline-none focus:border-light-blue"
                         required
                         @focus="onFocus = 2"
                         @blur="onFocus = (onFocus === 1) ? 1 : 0"
                     >
                 </div>
-                <button class="display py-6 mt-12 text-white text-center bg-lightBlue w-full disabled:opacity-50 disabled:cursor-default" :disabled="disableSubmit">
+                <button class="btn-main btn-reserve mt-12" :disabled="disableSubmit">
                     RESERVE NOW
                 </button>
             </form>

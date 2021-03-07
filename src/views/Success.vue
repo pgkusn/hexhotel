@@ -1,10 +1,10 @@
 <template>
     <main class="flex-grow mx-auto py-10">
-        <h1 class="text-4xl text-darkBlue font-bold">
+        <h1 class="text-4xl text-dark-blue font-bold">
             Reservation<br>received!
         </h1>
-        <div class="my-12 text-darkBlue">
-            <dl class="flex flex-wrap border-t border-b border-solid border-lightGray py-6">
+        <div class="my-12 text-dark-blue">
+            <dl class="flex flex-wrap border-t border-b border-solid border-light-gray py-6">
                 <dt class="font-bold">
                     GUEST
                 </dt>
@@ -18,7 +18,7 @@
                     {{ tel }}
                 </dd>
             </dl>
-            <dl class="flex flex-wrap border-b border-solid border-lightGray py-6">
+            <dl class="flex flex-wrap border-b border-solid border-light-gray py-6">
                 <dt class="font-bold">
                     ROOM
                 </dt>
@@ -26,7 +26,7 @@
                     {{ roomName }} / {{ bookingCount }} Nights
                 </dd>
             </dl>
-            <dl class="flex flex-wrap border-b border-solid border-lightGray py-6">
+            <dl class="flex flex-wrap border-b border-solid border-light-gray py-6">
                 <dt class="font-bold">
                     CHECK-IN
                 </dt>
@@ -41,7 +41,7 @@
                 </dd>
             </dl>
         </div>
-        <button class="back block mx-auto bg-lightBlue text-white text-center" @click="back">
+        <button class="btn-back btn-main block mx-auto" @click="back">
             HOMEPAGE
         </button>
     </main>
@@ -104,9 +104,7 @@ dt {
 dd {
     width: calc(100% - 190px);
 }
-.back {
+.btn-back {
     width: 350px;
-    height: 72px;
-    line-height: 72px;
 }
 </style>

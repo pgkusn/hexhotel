@@ -1,33 +1,33 @@
 <template>
-    <div class="reserve-area relative text-darkBlue bg-white border-solid border-darkGray border-t">
+    <div class="reserve-area relative text-dark-blue bg-white border-solid border-dark-gray border-t">
         <template v-if="props.showHeader">
-            <div class="border-solid border-darkGray border-l border-r border-b">
+            <div class="border-solid border-dark-gray border-l border-r border-b">
                 <img :src="room?.imageUrl" alt="" class="room-img">
             </div>
-            <div class="px-8 py-6 border-solid border-darkGray border-l border-r border-b font-bold text-xl text-darkBlue">
+            <div class="px-8 py-6 border-solid border-dark-gray border-l border-r border-b font-bold text-xl text-dark-blue">
                 {{ room?.name }}
             </div>
         </template>
         <div
             v-if="props.showRoomList"
-            class="relative flex items-center px-8 py-6 border-solid border-darkGray border-l border-r border-b"
+            class="relative flex items-center px-8 py-6 border-solid border-dark-gray border-l border-r border-b"
             @click.stop="showMenu = !showMenu"
         >
             <span class="material-icons pointer-events-none">hotel</span>
-            <span class="ml-4 pointer-events-none" :class="room?.name ? 'text-darkBlue' : 'text-darkGray'">{{ room?.name || 'ROOM' }}</span>
+            <span class="ml-4 pointer-events-none" :class="room?.name ? 'text-dark-blue' : 'text-dark-gray'">{{ room?.name || 'ROOM' }}</span>
             <span class="material-icons pointer-events-none ml-auto">arrow_drop_down</span>
             <ul v-show="showMenu" class="room-menu absolute z-10 bg-white">
                 <li
                     v-for="item in rooms"
                     :key="item.id"
-                    class="text-darkGray pl-8 py-5 hover:bg-lightGray border-solid border-darkGray border-l border-r border-b"
+                    class="text-dark-gray pl-8 py-5 hover:bg-light-gray border-solid border-dark-gray border-l border-r border-b"
                     @click="roomId = item.id"
                 >
                     <span class="pointer-events-none">{{ item.name }}</span>
                 </li>
             </ul>
         </div>
-        <div class="date-picker flex items-center px-8 py-6 border-solid border-darkGray border-l border-r border-b" :class="{ 'is-focus': onFocus === 1 }">
+        <div class="date-picker flex items-center px-8 py-6 border-solid border-dark-gray border-l border-r border-b" :class="{ 'is-focus': onFocus === 1 }">
             <span class="material-icons pointer-events-none">date_range</span>
             <el-date-picker
                 v-model="choiceCheckIn"
@@ -39,10 +39,10 @@
                 @blur="onFocus = (onFocus === 2) ? 2 : 0"
                 @change="onCheckInChange"
             />
-            <span v-show="onFocus !== 1" class="date-picker__label absolute text-darkGray pointer-events-none">CHECK-IN</span>
+            <span v-show="onFocus !== 1" class="date-picker__label absolute text-dark-gray pointer-events-none">CHECK-IN</span>
             <span v-show="onFocus !== 1 && !choiceCheckIn" class="material-icons pointer-events-none ml-auto">arrow_drop_down</span>
         </div>
-        <div class="date-picker flex items-center px-8 py-6 border-solid border-darkGray border-l border-r border-b" :class="{ 'is-focus': onFocus === 2 }">
+        <div class="date-picker flex items-center px-8 py-6 border-solid border-dark-gray border-l border-r border-b" :class="{ 'is-focus': onFocus === 2 }">
             <span class="material-icons pointer-events-none">date_range</span>
             <el-date-picker
                 v-model="choiceCheckOut"
@@ -54,36 +54,36 @@
                 @blur="onFocus = (onFocus === 1) ? 1 : 0"
                 @change="onCheckOutChange"
             />
-            <span v-show="onFocus !== 2" class="date-picker__label absolute text-darkGray pointer-events-none">CHECK-OUT</span>
+            <span v-show="onFocus !== 2" class="date-picker__label absolute text-dark-gray pointer-events-none">CHECK-OUT</span>
             <span v-show="onFocus !== 2 && !choiceCheckOut" class="material-icons pointer-events-none ml-auto">arrow_drop_down</span>
         </div>
-        <div v-show="props.showTotal && !disableSubmit" class="px-8 py-6 border-solid border-darkGray border-l border-r border-b">
+        <div v-show="props.showTotal && !disableSubmit" class="px-8 py-6 border-solid border-dark-gray border-l border-r border-b">
             <dl class="flex flex-wrap mb-6">
-                <dt v-show="dayCount.normalDay" class="w-1/2 text-darkGray">
+                <dt v-show="dayCount.normalDay" class="w-1/2 text-dark-gray">
                     ${{ format(room?.normalDayPrice) }} × {{ dayCount.normalDay }} night
                 </dt>
-                <dd v-show="dayCount.normalDay" class="w-1/2 text-right text-darkGray">
+                <dd v-show="dayCount.normalDay" class="w-1/2 text-right text-dark-gray">
                     ${{ format(normalDaySubtotal) }}
                 </dd>
-                <dt v-show="dayCount.holiday" class="w-1/2 mt-2 text-darkGray">
+                <dt v-show="dayCount.holiday" class="w-1/2 mt-2 text-dark-gray">
                     ${{ format(room?.holidayPrice) }} × {{ dayCount.holiday }} night
                 </dt>
-                <dd v-show="dayCount.holiday" class="w-1/2 mt-2 text-right text-darkGray">
+                <dd v-show="dayCount.holiday" class="w-1/2 mt-2 text-right text-dark-gray">
                     ${{ format(holidaySubtotal) }}
                 </dd>
             </dl>
-            <dl class="flex flex-wrap border-solid border-lightGray border-t pt-6">
-                <dt class="w-1/2 text-darkBlue">
+            <dl class="flex flex-wrap border-solid border-light-gray border-t pt-6">
+                <dt class="w-1/2 text-dark-blue">
                     TOTAL
                 </dt>
-                <dd class="w-1/2 text-right text-darkBlue font-bold">
+                <dd class="w-1/2 text-right text-dark-blue font-bold">
                     ${{ format(total) }}
                 </dd>
             </dl>
         </div>
         <button
             v-if="props.showSubmit"
-            class="display py-6 text-white text-center bg-lightBlue w-full disabled:opacity-50 disabled:cursor-default"
+            class="btn-main btn-reserve"
             :disabled="disableSubmit"
             @click="submitHandler"
         >
